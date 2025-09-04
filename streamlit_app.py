@@ -75,7 +75,7 @@ def create_binary_visualization(decimal_val, binary_str, title):
         x=positions,
         y=[1] * len(digits),
         text=digits,
-        textposition='middle',
+        textposition='inside',
         marker_color=colors,
         name=f'{decimal_val} in binary'
     ))
@@ -142,7 +142,8 @@ with col1:
     num1 = st.number_input(
         "小数1を入力 (0-1の範囲推奨)",
         value=0.1,
-        format="%.10f",
+        format="%.3f",
+        step=0.001,
         key="num1"
     )
 
@@ -150,7 +151,8 @@ with col2:
     num2 = st.number_input(
         "小数2を入力 (0-1の範囲推奨)", 
         value=0.2,
-        format="%.10f",
+        format="%.3f",
+        step=0.001,
         key="num2"
     )
 
