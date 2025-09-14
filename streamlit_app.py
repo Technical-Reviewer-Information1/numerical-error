@@ -119,12 +119,12 @@ def create_error_visualization(original_nums, result, expected):
 
 # Streamlit App
 st.set_page_config(
-    page_title="演算誤差可視化アプリ",
+    page_title="演算誤差",
     page_icon="🔢",
     layout="wide"
 )
 
-st.title("🔢 演算誤差可視化アプリ")
+st.title("演算誤差（pp.191-192）")
 st.caption("Created by Dit-Lab.(Daiki ITO)")
 st.caption("Supported by Tomoaki ATSUMI")
 
