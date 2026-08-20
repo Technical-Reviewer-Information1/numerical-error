@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>演算誤差｜情報Ⅰ共通テスト対策問題集</title>
+<meta name="description" content="「5.4－5.3」がなぜ0.1にならないのかを、実際に計算しながら確かめます。誤差を避ける方法も試せます。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%2315181c%22/%3E%3Ctext x=%2216%22 y=%2222%22 font-size=%2218%22 font-family=%22monospace%22 fill=%22%23fff%22 text-anchor=%22middle%22%3E01%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<header class="app-header">
+  <div class="inner">
+    <span class="eyebrow">第 6 章　コンピュータ　6-5</span>
+    <h1>演算誤差（pp.190）</h1>
+    <p class="lead">「5.4－5.3」がなぜ0.1にならないのかを、実際に計算しながら確かめます。誤差を避ける方法も試せます。</p>
+    <p class="credit">Created by Dit-Lab.(Daiki ITO)　/　Supported by Tomoaki ATSUMI</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="step" id="step1">
+    <h2><span class="no">STEP 1</span>10進法の小数を2進法にしてみる</h2>
+    <p class="desc">2をかけて整数部分を取り出す操作をくり返します。<strong>途中で0になれば有限小数</strong>、同じ数が戻ってきたら<strong>循環小数</strong>です。</p>
+    <div class="panel">
+      <div class="btn-row" style="align-items:flex-end;flex-wrap:wrap;gap:10px">
+        <label class="fld" for="decIn">10進法の小数<br>
+          <input type="text" id="decIn" value="0.2" class="mono" style="width:9em"></label>
+        <button class="btn" data-d="0.2">0.2</button>
+        <button class="btn" data-d="0.4">0.4</button>
+        <button class="btn" data-d="0.5625">0.5625</button>
+        <button class="btn" data-d="0.625">0.625</button>
+        <button class="btn" data-d="0.875">0.875</button>
+      </div>
+      <div class="grid c2" style="margin-top:12px">
+        <div>
+          <p class="qhead" style="margin:0 0 6px">計算のようす</p>
+          <div class="expand" id="expBox"></div>
+        </div>
+        <div>
+          <p class="qhead" style="margin:0 0 6px">2進法で表すと</p>
+          <div class="bitstr" id="binOut">—</div>
+          <div class="note" id="expNote" style="margin-top:12px"></div>
+        </div>
+      </div>
+      <div class="note info" style="margin-top:12px">
+        2進法で有限小数になるのは、分母が 2・4・8・16… と<strong>2の累乗で表せる分数</strong>だけです。
+        たとえば 0.4 ＝ <span class="mono">2/5</span> は分母に5があるので、2進法では終わりません。
+      </div>
+    </div>
+  </section>
+
+  <section class="step" id="step2">
+    <h2><span class="no">STEP 2</span>循環小数になるものを選ぶ（問1）</h2>
+    <div class="panel">
+      <p class="qhead">2進法の小数で表したときに循環小数となる10進法の数はどれか。</p>
+      <div id="q1Choices" class="choice4"></div>
+      <div class="note" id="q1Fb" hidden style="margin-top:10px"></div>
+    </div>
+  </section>
+
+  <section class="step" id="step3">
+    <h2><span class="no">STEP 3</span>「5.4－5.3」を計算してみる</h2>
+    <p class="desc">表計算ソフトでもプログラムでも同じことが起こります。この画面で実際に計算した結果です。</p>
+    <div class="panel">
+      <div class="btn-row" style="align-items:flex-end;flex-wrap:wrap;gap:10px">
+        <label class="fld" for="aIn">計算する式<br>
+          <input type="text" id="aIn" value="5.4" class="mono" style="width:7em"></label>
+        <span style="font-weight:700;padding-bottom:10px">−</span>
+        <label class="fld" for="bIn"><br>
+          <input type="text" id="bIn" value="5.3" class="mono" style="width:7em"></label>
+        <button class="btn" data-p="5.4,5.3">5.4 − 5.3</button>
+        <button class="btn" data-p="0.1,0.3">0.1 − 0.3</button>
+        <button class="btn" data-p="1.1,1.0">1.1 − 1.0</button>
+      </div>
+      <div class="grid c2" style="margin-top:12px">
+        <div class="cmpbox"><div class="lbl">人が筆算で求めた答え</div><div class="val" id="handAns">—</div></div>
+        <div class="cmpbox ng"><div class="lbl">コンピュータの答え</div><div class="val" id="compAns">—</div></div>
+      </div>
+      <div class="note" id="calcNote" style="margin-top:12px"></div>
+      <hr class="sep">
+      <p class="qhead">中で何が起きているか</p>
+      <div class="tbl-scroll"><table class="tbl" id="innerTable"></table></div>
+    </div>
+  </section>
+
+  <section class="step" id="step4">
+    <h2><span class="no">STEP 4</span>誤差の名前と原因（問2）</h2>
+    <div class="panel" id="blankBox"></div>
+    <div class="note" id="blankNote" style="margin-top:10px"></div>
+    <div class="panel" style="margin-top:14px">
+      <p class="qhead">代表的な演算誤差</p>
+      <div class="tbl-scroll"><table class="tbl" id="errTable"></table></div>
+    </div>
+  </section>
+
+  <section class="step" id="step5">
+    <h2><span class="no">STEP 5</span>誤差を避ける方法を試す</h2>
+    <p class="desc">小数のまま計算せず、<strong>10<sup>n</sup>倍して整数にしてから計算し、あとで10<sup>n</sup>で割る</strong>と誤差が出ません。</p>
+    <div class="panel">
+      <label class="fld" for="nPow">何倍するか：10<sup><span class="mono" id="nPowV">1</span></sup> ＝ <span class="mono" id="nPowN">10</span> 倍</label>
+      <input type="range" id="nPow" min="0" max="4" step="1" value="1">
+      <div class="eqbox" id="fixEq" style="margin-top:12px">—</div>
+      <div class="note" id="fixNote" style="margin-top:12px"></div>
+      <div class="note info" style="margin-top:10px">
+        2<sup>n</sup>倍ではうまくいきません。5.4 は 2 を何回かけても整数にならないからです（5.4 ＝ 27/5 で、分母に5があります）。
+      </div>
+    </div>
+  </section>
+
+  <section class="step" id="glossary">
+    <h2><span class="no">用語</span>この節で出てくることば</h2>
+    <div class="panel"><div id="glossBox"></div></div>
+  </section>
+
+  <section class="step" id="wrap">
+    <h2><span class="no">まとめ</span>おさえておきたいこと</h2>
+    <div class="panel">
+      <ul class="bullets">
+        <li>2進法で有限小数になるのは、<strong>分母が2の累乗で表せる分数</strong>だけ。0.2や0.4は循環小数になる。</li>
+        <li>限られたビット数で表すために四捨五入などが行われ、<strong>丸め誤差</strong>が生じる。</li>
+        <li>「5.4－5.3」が0.1にならないのは、<strong>小数を2進法に直すと循環小数になり、正確に表せない</strong>ため。</li>
+        <li>対策は<strong>10<sup>n</sup>倍して整数にしてから計算し、あとで10<sup>n</sup>で割る</strong>こと。</li>
+        <li>ほかに<strong>桁あふれ誤差</strong>（オーバーフロー・アンダーフロー）、<strong>情報落ち</strong>、<strong>桁落ち</strong>、<strong>打ち切り誤差</strong>がある。</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2><span class="no">活用</span>授業・探究での使い方</h2>
+    <div class="use-note">
+      <h3>授業で</h3>
+      <ul>
+        <li>STEP 1 で0.2や0.4を2進法に直し、循環して終わらないことを目で確かめさせる。</li>
+        <li>STEP 3 で実際に 5.4−5.3 を計算させ、表計算ソフトでも同じことが起こると伝える。</li>
+        <li>STEP 5 で整数に直してから計算する方法を試し、誤差が消えることを確認する。</li>
+      </ul>
+      <h3 style="margin-top:12px">探究で</h3>
+      <ul>
+        <li>表計算ソフトで誤差が出る計算をいくつか見つけ、共通点を探す。</li>
+        <li>お金の計算をするプログラムで小数を使ってはいけない理由を説明する。</li>
+        <li>桁落ち・情報落ちが実際に問題になった事例を調べる。</li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer class="app-footer">
+  情報Ⅰ 共通テスト対策問題集（技術評論社）連動Webアプリ　/　Created by Dit-Lab.(Daiki ITO)　/　Supported by Tomoaki ATSUMI
+</footer>
+
+<script src="js/tools.js"></script>
+<script src="js/chart.js"></script>
+<script src="js/terms.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
