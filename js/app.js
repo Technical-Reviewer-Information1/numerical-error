@@ -204,5 +204,18 @@
     drawExpand(); drawQ1(); drawCalc(); drawBlanks(); drawErrTable(); drawFix();
     window.Terms.attach();
   }
+  if (window.Predict) Predict.make('pdE', {
+    q: 'コンピュータで <span class="mono">0.1 ＋ 0.1 ＋ 0.1</span> を計算して、結果が <span class="mono">0.3</span> と等しいか調べました。どうなるでしょう？',
+    type: 'pick',
+    ch: ['等しい', '等しくない', '計算できずエラーになる', '0 になる'],
+    answer: function () { return 1; },
+    show: function () {
+      return '実際の結果は <span class="mono">' + (0.1 + 0.1 + 0.1) + '</span> で、<strong>0.3 とは等しくありません</strong>。';
+    },
+    why: '10進法の 0.1 は、<strong>2進法では割り切れない循環小数</strong>になります。' +
+         'どこかで打ち切るしかないので、ごくわずかな誤差が残り、足すほど積み重なります。' +
+         'だからプログラムで小数を比べるときは「＝」を使わず、<strong>差が十分小さいかどうか</strong>で判定します。'
+  });
+
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
